@@ -81,6 +81,7 @@ plot(dailyAve$interval, dailyAve$steps, type = &quot;l&quot;, xlab = &quot;Inter
 </div>
 <div id="imputing-missing-values" class="section level2">
 <h2>Imputing missing values</h2>
+<p>My strategy is to replace the ’NA’s with the mean of that 5-minute interval</p>
 <pre class="r"><code>bad &lt;- is.na(myDF$steps)
 sum(bad)</code></pre>
 <pre><code>## [1] 2304</code></pre>
@@ -112,6 +113,7 @@ hist(totalDF.Imputed$steps, main = &quot;Total number of steps taken each day&qu
 </div>
 <div id="are-there-differences-in-activity-patterns-between-weekdays-and-weekends" class="section level2">
 <h2>Are there differences in activity patterns between weekdays and weekends?</h2>
+<p>Turns out there are differences, see the plot below.</p>
 <pre class="r"><code>library(lattice)
 imputedDF$weekend &lt;- weekdays(strptime(imputedDF$date, format = &quot;%Y-%m-%d&quot;)) %in% c(&quot;Saturday&quot;,&quot;Sunday&quot;)
 imputedDF$daytype[imputedDF$weekend] &lt;- &quot;weekend&quot; 

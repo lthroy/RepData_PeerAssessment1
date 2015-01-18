@@ -34,6 +34,7 @@ dailyAve[which(dailyAve$steps == max(dailyAve$steps)),]
 
 
 ## Imputing missing values
+My strategy is to replace the 'NA's with the mean of that 5-minute interval
 ```{r}
 bad <- is.na(myDF$steps)
 sum(bad)
@@ -58,6 +59,7 @@ median(totalDF.Imputed$steps, na.rm = TRUE)
 
 
 ## Are there differences in activity patterns between weekdays and weekends?
+Turns out there are differences, see the plot below.
 ```{r}
 library(lattice)
 imputedDF$weekend <- weekdays(strptime(imputedDF$date, format = "%Y-%m-%d")) %in% c("Saturday","Sunday")
