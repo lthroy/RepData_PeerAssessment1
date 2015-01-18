@@ -11,12 +11,18 @@ totalDF <- setNames(aggregate(myDF$steps ~ myDF$date, FUN = sum, na.rm = TRUE),c
 
 
 ## What is mean total number of steps taken per day?
+Histogram of total number of steps taken each day.
+
 
 ```r
 hist(totalDF$steps, main = "Total number of steps taken each day", xlab = "Total steps")
 ```
 
 ![](PA1_template_files/figure-html/unnamed-chunk-2-1.png) 
+
+
+The mean of total number of steps taken each day.
+
 
 ```r
 mean(totalDF$steps, na.rm = TRUE)
@@ -25,6 +31,8 @@ mean(totalDF$steps, na.rm = TRUE)
 ```
 ## [1] 10766.19
 ```
+The median of total number of steps taken each day.
+
 
 ```r
 median(totalDF$steps, na.rm = TRUE)
@@ -37,6 +45,8 @@ median(totalDF$steps, na.rm = TRUE)
 
 
 ## What is the average daily activity pattern?
+Time series plot (i.e. type = "l") of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all days (y-axis)
+
 
 ```r
 dailyAve <- setNames(aggregate(myDF$steps ~ myDF$interval, FUN = mean, na.rm = TRUE),c("interval", "steps"))
@@ -44,7 +54,11 @@ interval <- unique(myDF$interval)
 plot(dailyAve$interval, dailyAve$steps, type = "l", xlab = "Interval", ylab = "Average steps")
 ```
 
-![](PA1_template_files/figure-html/unnamed-chunk-3-1.png) 
+![](PA1_template_files/figure-html/unnamed-chunk-5-1.png) 
+
+
+Which 5-minute interval, on average across all the days in the dataset, contains the maximum number of steps?
+
 
 ```r
 dailyAve[which(dailyAve$steps == max(dailyAve$steps)),]
@@ -58,7 +72,7 @@ dailyAve[which(dailyAve$steps == max(dailyAve$steps)),]
 
 
 ## Imputing missing values
-My strategy is to replace the 'NA's with the mean of that 5-minute interval
+Number of missing values
 
 ```r
 bad <- is.na(myDF$steps)
@@ -68,6 +82,9 @@ sum(bad)
 ```
 ## [1] 2304
 ```
+
+My strategy is to replace the 'NA's with the mean of that 5-minute interval
+
 
 ```r
 aggregated <- aggregate(myDF$steps, by = list(myDF$interval), FUN = mean, na.rm = TRUE )
@@ -95,10 +112,17 @@ myDF$imputedSteps[!is.na(myDF$steps)] <- myDF$steps[!is.na(myDF$steps)]
 imputedDF <- myDF[,c("interval", "imputedSteps", "date")]
 names(imputedDF)[2] <- "steps"
 totalDF.Imputed <- setNames(aggregate(imputedDF$steps ~ imputedDF$date, FUN = sum, na.rm = TRUE),c("date", "steps"))
+```
+
+Histogram of the total number of steps taken each day
+
+```r
 hist(totalDF.Imputed$steps, main = "Total number of steps taken each day", xlab = "Total steps")
 ```
 
-![](PA1_template_files/figure-html/unnamed-chunk-4-1.png) 
+![](PA1_template_files/figure-html/unnamed-chunk-9-1.png) 
+
+Mean and median for the imputed dataset
 
 ```r
 mean(totalDF.Imputed$steps, na.rm = TRUE)
@@ -132,4 +156,4 @@ xyplot(steps ~ interval | daytype, data = dailyAve.daytype, layout = c(1,2), pan
 })
 ```
 
-![](PA1_template_files/figure-html/unnamed-chunk-5-1.png) 
+![](PA1_template_files/figure-html/unnamed-chunk-11-1.png) 

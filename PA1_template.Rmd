@@ -15,30 +15,54 @@ totalDF <- setNames(aggregate(myDF$steps ~ myDF$date, FUN = sum, na.rm = TRUE),c
 
 
 ## What is mean total number of steps taken per day?
+Histogram of total number of steps taken each day.
+
 ```{r}
 hist(totalDF$steps, main = "Total number of steps taken each day", xlab = "Total steps")
+```
+
+
+The mean of total number of steps taken each day.
+
+```{r}
 mean(totalDF$steps, na.rm = TRUE)
+```
+The median of total number of steps taken each day.
+
+```{r}
 median(totalDF$steps, na.rm = TRUE)
 ```
 
 
 
 ## What is the average daily activity pattern?
+Time series plot (i.e. type = "l") of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all days (y-axis)
+
 ```{r}
 dailyAve <- setNames(aggregate(myDF$steps ~ myDF$interval, FUN = mean, na.rm = TRUE),c("interval", "steps"))
 interval <- unique(myDF$interval)
 plot(dailyAve$interval, dailyAve$steps, type = "l", xlab = "Interval", ylab = "Average steps")
+```
+
+
+Which 5-minute interval, on average across all the days in the dataset, contains the maximum number of steps?
+
+```{r}
 dailyAve[which(dailyAve$steps == max(dailyAve$steps)),]
 ```
 
 
 
 ## Imputing missing values
-My strategy is to replace the 'NA's with the mean of that 5-minute interval
+Number of missing values
 ```{r}
 bad <- is.na(myDF$steps)
 sum(bad)
+```
 
+My strategy is to replace the 'NA's with the mean of that 5-minute interval
+
+```{r}
 aggregated <- aggregate(myDF$steps, by = list(myDF$interval), FUN = mean, na.rm = TRUE )
 names(aggregated) <- c("interval", "stepsMean")
 
@@ -52,7 +76,15 @@ myDF$imputedSteps[!is.na(myDF$steps)] <- myDF$steps[!is.na(myDF$steps)]
 imputedDF <- myDF[,c("interval", "imputedSteps", "date")]
 names(imputedDF)[2] <- "steps"
 totalDF.Imputed <- setNames(aggregate(imputedDF$steps ~ imputedDF$date, FUN = sum, na.rm = TRUE),c("date", "steps"))
+```
+
+Histogram of the total number of steps taken each day
+```{r}
 hist(totalDF.Imputed$steps, main = "Total number of steps taken each day", xlab = "Total steps")
+```
+
+Mean and median for the imputed dataset
+```{r}
 mean(totalDF.Imputed$steps, na.rm = TRUE)
 median(totalDF.Imputed$steps, na.rm = TRUE)
 ```
